@@ -1,4 +1,3 @@
-
 <p align="center">
   <img src="calippo-logo.png" alt="Calippo" width="420">
 </p>
@@ -9,7 +8,13 @@ Könnyű, különálló Grepolis userscript a játékos saját egységállomány
 
 ## Telepítés
 
-> A telepítési hivatkozás a repository létrehozása után kerül véglegesítésre.
+<p align="center">
+  <a href="https://raw.githubusercontent.com/PeterKiss-cyber/calippo-seregjelento/main/Calippo-seregjelento-feltolto.user.js">
+    <img src="https://img.shields.io/badge/Calippo-Telepítés-4c9b35?style=for-the-badge" alt="Calippo Seregjelentő telepítése">
+  </a>
+</p>
+
+Kattints a **Telepítés** gombra, majd hagyd jóvá a userscriptet a Tampermonkey vagy Violentmonkey ablakában.
 
 A használathoz Tampermonkey vagy Violentmonkey böngészőbővítmény szükséges.
 
@@ -20,6 +25,8 @@ A használathoz Tampermonkey vagy Violentmonkey böngészőbővítmény szüksé
 - Megmutatja az észlelt egységek részletes számát.
 - Kézi feltöltést biztosít külön **Feltöltés** gombbal.
 - A városon kívüli saját egységek opcionálisan beleszámíthatók a kézi jelentésbe.
+- Sikeres regisztráció után hatóránként automatikusan frissíti a teljes sereget, a városon kívüli saját egységekkel együtt.
+- A háttérfeltöltés nem nyit ablakot és nem küld játékbeli értesítést.
 - Meghívókódos önregisztrációt használ, ezért az adminisztrátornak nem kell minden játékost külön felvennie.
 
 ## Jogosultság
@@ -39,4 +46,4 @@ A script a világ azonosítóját, a játékos azonosítóját, a játékos nev�
 
 Készítette: **Arti**
 
-Verzió: **1.1.0**
+Verzió: **1.1.1**
