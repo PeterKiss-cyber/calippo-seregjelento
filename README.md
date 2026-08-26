@@ -25,8 +25,6 @@ A használathoz Tampermonkey vagy Violentmonkey böngészőbővítmény szüksé
 - Megmutatja az észlelt egységek részletes számát.
 - Kézi feltöltést biztosít külön **Feltöltés** gombbal.
 - A városon kívüli saját egységek opcionálisan beleszámíthatók a kézi jelentésbe.
-- Sikeres regisztráció után hatóránként automatikusan frissíti a teljes sereget, a városon kívüli saját egységekkel együtt.
-- A háttérfeltöltés nem nyit ablakot és nem küld játékbeli értesítést.
 - Meghívókódos önregisztrációt használ, ezért az adminisztrátornak nem kell minden játékost külön felvennie.
 
 ## Jogosultság
