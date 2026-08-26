@@ -1,6 +1,6 @@
-<img src="calippo-logo.png">
+
 <p align="center">
-  <img src="assets/calippo-logo.png" alt="Calippo" width="420">
+  <img src="calippo-logo.png" alt="Calippo" width="420">
 </p>
 
 # Calippo Seregjelentő Feltöltő
