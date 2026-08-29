@@ -1,13 +1,15 @@
 // ==UserScript==
 // @name         Calippo Seregjelentő Feltöltő
 // @namespace    calippo.grepolis
-// @version      1.1.0
+// @version      1.1.2
 // @description  Különálló, kizárólag kézi seregjelentés-feltöltő a Calippo központi adatbázisához.
 // @author       Arti
 // @match        https://*.grepolis.com/game/*
 // @run-at       document-idle
 // @grant        unsafeWindow
 // @connect      calippo-license.szutyi0906.workers.dev
+// @downloadURL  https://raw.githubusercontent.com/PeterKiss-cyber/calippo-seregjelento/main/Calippo-seregjelento-feltolto.user.js
+// @updateURL    https://raw.githubusercontent.com/PeterKiss-cyber/calippo-seregjelento/main/Calippo-seregjelento-feltolto.user.js
 // ==/UserScript==
 
 (() => {
@@ -190,7 +192,7 @@
         const style = document.createElement('style');
         style.id = 'calippo_army_uploader_style';
         style.textContent = `
-            #${BUTTON_ID}{position:fixed;left:12px;bottom:92px;z-index:10000;padding:8px 12px;border:2px solid #6b421c;border-radius:7px;background:linear-gradient(#f4d889,#b88939);color:#2f1905;font:bold 14px Arial;cursor:pointer;box-shadow:0 2px 7px #0008}
+            #${BUTTON_ID}{position:fixed;left:12px;bottom:242px;z-index:10000;padding:8px 12px;border:2px solid #6b421c;border-radius:7px;background:linear-gradient(#f4d889,#b88939);color:#2f1905;font:bold 14px Arial;cursor:pointer;box-shadow:0 2px 7px #0008}
             #${PANEL_ID}{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10001;width:min(820px,calc(100vw - 40px));max-height:calc(100vh - 50px);border:4px ridge #9b763e;border-radius:7px;background:#ead39c;color:#2f1905;box-shadow:0 7px 25px #000b;font:14px Arial;box-sizing:border-box}
             #${PANEL_ID} .calippo-army-upload-header{display:flex;justify-content:space-between;align-items:center;padding:9px 13px;background:#422d18;color:#f4d889;font-size:20px}
             #${PANEL_ID} .calippo-army-upload-close{border:0;background:transparent;color:#f4d889;font-size:28px;line-height:22px;cursor:pointer}
