@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Calippo Seregjelentő Feltöltő
 // @namespace    calippo.grepolis
-// @version      1.1.2
+// @version      1.2.0
 // @description  Különálló, kizárólag kézi seregjelentés-feltöltő a Calippo központi adatbázisához.
 // @author       Arti
 // @match        https://*.grepolis.com/game/*
@@ -21,6 +21,7 @@
     const PANEL_ID = 'calippo_army_uploader_panel';
     const UPLOAD_TIME_PREFIX = 'calippo_army_uploader_last_';
     const REGISTERED_PREFIX = 'calippo_army_uploader_registered_';
+    const BUTTON_POSITION_KEY = 'calippo_army_uploader_button_position';
     let mounted = false;
 
     const unitIds = () => Object.keys(uw.GameData?.units || {})
@@ -192,7 +193,8 @@
         const style = document.createElement('style');
         style.id = 'calippo_army_uploader_style';
         style.textContent = `
-            #${BUTTON_ID}{position:fixed;left:12px;bottom:242px;z-index:10000;padding:8px 12px;border:2px solid #6b421c;border-radius:7px;background:linear-gradient(#f4d889,#b88939);color:#2f1905;font:bold 14px Arial;cursor:pointer;box-shadow:0 2px 7px #0008}
+            #${BUTTON_ID}{position:fixed;left:12px;bottom:242px;z-index:10000;padding:8px 12px;border:2px solid #6b421c;border-radius:7px;background:linear-gradient(#f4d889,#b88939);color:#2f1905;font:bold 14px Arial;cursor:grab;box-shadow:0 2px 7px #0008;touch-action:none;user-select:none}
+            #${BUTTON_ID}.calippo-dragging{cursor:grabbing;filter:brightness(1.08)}
             #${PANEL_ID}{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:10001;width:min(820px,calc(100vw - 40px));max-height:calc(100vh - 50px);border:4px ridge #9b763e;border-radius:7px;background:#ead39c;color:#2f1905;box-shadow:0 7px 25px #000b;font:14px Arial;box-sizing:border-box}
             #${PANEL_ID} .calippo-army-upload-header{display:flex;justify-content:space-between;align-items:center;padding:9px 13px;background:#422d18;color:#f4d889;font-size:20px}
             #${PANEL_ID} .calippo-army-upload-close{border:0;background:transparent;color:#f4d889;font-size:28px;line-height:22px;cursor:pointer}
@@ -210,6 +212,56 @@
         document.head.appendChild(style);
     }
 
+    function makeButtonDraggable(button) {
+        try {
+            const saved = JSON.parse(localStorage.getItem(BUTTON_POSITION_KEY) || 'null');
+            if (Number.isFinite(saved?.left) && Number.isFinite(saved?.top)) {
+                button.style.left = Math.max(0, Math.min(saved.left, innerWidth - 40)) + 'px';
+                button.style.top = Math.max(0, Math.min(saved.top, innerHeight - 30)) + 'px';
+                button.style.bottom = 'auto';
+            }
+        } catch (_) {}
+        let drag = null;
+        let suppressClick = false;
+        button.addEventListener('pointerdown', event => {
+            if (event.button !== 0) return;
+            const rect = button.getBoundingClientRect();
+            drag = {pointerId:event.pointerId,startX:event.clientX,startY:event.clientY,left:rect.left,top:rect.top,moved:false};
+            button.setPointerCapture?.(event.pointerId);
+        });
+        button.addEventListener('pointermove', event => {
+            if (!drag || drag.pointerId !== event.pointerId) return;
+            const dx = event.clientX - drag.startX, dy = event.clientY - drag.startY;
+            if (!drag.moved && Math.hypot(dx, dy) < 4) return;
+            drag.moved = true;
+            suppressClick = true;
+            button.classList.add('calippo-dragging');
+            const left = Math.max(0, Math.min(drag.left + dx, innerWidth - button.offsetWidth));
+            const top = Math.max(0, Math.min(drag.top + dy, innerHeight - button.offsetHeight));
+            button.style.left = left + 'px';
+            button.style.top = top + 'px';
+            button.style.bottom = 'auto';
+            event.preventDefault();
+        });
+        const finish = event => {
+            if (!drag || drag.pointerId !== event.pointerId) return;
+            const moved = drag.moved;
+            drag = null;
+            button.classList.remove('calippo-dragging');
+            if (moved) {
+                const rect = button.getBoundingClientRect();
+                localStorage.setItem(BUTTON_POSITION_KEY, JSON.stringify({left:Math.round(rect.left),top:Math.round(rect.top)}));
+                setTimeout(() => { suppressClick = false; }, 0);
+            }
+        };
+        button.addEventListener('pointerup', finish);
+        button.addEventListener('pointercancel', finish);
+        button.addEventListener('click', event => {
+            if (suppressClick) { event.preventDefault(); event.stopImmediatePropagation(); return; }
+            createPanel();
+        });
+    }
+
     function mount(attempt = 0) {
         if (mounted || document.getElementById(BUTTON_ID)) return;
         if (!uw.Game?.player_id || !uw.GameData?.units || !uw.ITowns) {
@@ -222,8 +274,8 @@
         button.id = BUTTON_ID;
         button.type = 'button';
         button.textContent = 'Seregjelentő';
-        button.addEventListener('click', createPanel);
         document.body.appendChild(button);
+        makeButtonDraggable(button);
         startBackgroundUpload();
     }
 
